@@ -40,7 +40,7 @@ addresult <- function(data, km, k){
 ############WCD############
 #引数：kの数(k, integer), addresultの引数(listed, list)、kmeansの結果(km)
 #返り値：wcdの値
-wcd <- function(k, listed){
+wcd <- function(k, listed, km){
 	#クラスタ番号分追加
 	cent <- transform(km$center, center = 0)
 	for (i in 1:k){
