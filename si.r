@@ -41,14 +41,13 @@ addresult <- function(data, km, k){
 #引数：kの数(k, integer), addresultの引数(listed, list)、kmeansの結果(km)
 #返り値：wcdの値
 wcd <- function(k, listed, km){
-	#クラスタ番号分追加
-	cent <- transform(km$center, center = 0)
 	for (i in 1:k){
 		count <- 0
 		for (j in 1:nrow(listed[[2]][[i]])){
-			cluc_data <- rbind(cent[i,], listed[[2]][[i]][j,])
-			count <- length(cluc_data)
-			cluc <- cluc_data[, -count]
+			row_1 <- listed[[2]][[i]][j,]
+			len <- length(row_1)
+			cutlast <- row_1[, -len]
+			cluc <- rbind(km$center[i,], cutlast)
 			dis <- dist(cluc)
 			dis2 <- dis^2
 			count <- count + dis2
