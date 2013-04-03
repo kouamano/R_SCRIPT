@@ -41,23 +41,25 @@ addresult <- function(data, km, k){
 #引数：kの数(k, integer), addresultの引数(listed, list)、kmeansの結果(km)
 #返り値：wcdの値
 wcd <- function(k, listed, km){
+	all_sq <- 0
+	w <- 0
 	for (i in 1:k){
 		count <- 0
 		for (j in 1:nrow(listed[[2]][[i]])){
 			row_1 <- listed[[2]][[i]][j,]
 			len <- length(row_1)
-			cutlast <- row_1[, -len]
+			cutlast <- row_1[, -len[1]]
 			cluc <- rbind(km$center[i,], cutlast)
 			dis <- dist(cluc)
-			dis2 <- dis^2
+			dis2 <- dis[1]^2
 			count <- count + dis2
 		}
 		waru <- count/km$size[i]
-		sq=sqrt(waru)
-		all_sq <- sq + all_sq
+		sq = sqrt(waru)
+		all_sq <- all_sq + sq
 	}
-	wcd <- all_sq / k
-	wcd
+	w <- all_sq / k
+	w
 }
 
 
