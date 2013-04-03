@@ -1,4 +1,4 @@
-#SI index in R
+ï»¿#SI index in R
 
 #> class(k$cluster)
 #[1] "integer"
@@ -24,10 +24,10 @@
 
 
 ######## add result #######
-#ˆø”Fƒf[ƒ^(data, data.frame)Akmeans‚ÌŒ‹‰Ê(km)Ak‚Ì”(k, integer)
-#•Ô‚è’lFlist
-#			list[1] Œ‹‰Ê‚ª‚­‚Á‚Â‚¢‚½data.frame
-#			list[[2]][[n]] kmeans‚ÌŒ‹‰ÊAnƒNƒ‰ƒXƒ^[‚ÉŠ„‚è“–‚Ä‚ç‚ê‚½—v‘f‚¾‚¯‚Ìdata.frame
+#å¼•æ•°ï¼šãƒ‡ãƒ¼ã‚¿(data, data.frame)ã€kmeansã®çµæœ(km)ã€kã®æ•°(k, integer)
+#è¿”ã‚Šå€¤ï¼šlist
+#			list[1] çµæœãŒãã£ã¤ã„ãŸdata.frame
+#			list[[2]][[n]] kmeansã®çµæœã€nã‚¯ãƒ©ã‚¹ã‚¿ãƒ¼ã«å‰²ã‚Šå½“ã¦ã‚‰ã‚ŒãŸè¦ç´ ã ã‘ã®data.frame
 		
 addresult <- function(data, km, k){
 	result_data <- cbind(data, km$cluster)
@@ -38,10 +38,10 @@ addresult <- function(data, km, k){
 }
 
 ############WCD############
-#ˆø”Fk‚Ì”(k, integer), addresult‚Ìˆø”(listed, list)Akmeans‚ÌŒ‹‰Ê(km)
-#•Ô‚è’lFwcd‚Ì’l
+#å¼•æ•°ï¼škã®æ•°(k, integer), addresultã®å¼•æ•°(listed, list)ã€kmeansã®çµæœ(km)
+#è¿”ã‚Šå€¤ï¼šwcdã®å€¤
 wcd <- function(k, listed, km){
-	#ƒNƒ‰ƒXƒ^”Ô†•ª’Ç‰Á
+	#ã‚¯ãƒ©ã‚¹ã‚¿ç•ªå·åˆ†è¿½åŠ 
 	cent <- transform(km$center, center = 0)
 	for (i in 1:k){
 		count <- 0
@@ -64,8 +64,8 @@ wcd <- function(k, listed, km){
 
 
 ############BCD############
-#ˆø”F
-#•Ô‚è’lF
+#å¼•æ•°ï¼š
+#è¿”ã‚Šå€¤ï¼š
 bcd <- function(){
 
 
