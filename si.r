@@ -1,34 +1,10 @@
 ﻿#SI index in R
 
-#> class(k$cluster)
-#[1] "integer"
-#> class(k$centers)
-#[1] "matrix"
-#> class(k$totss)
-#[1] "numeric"
-#> class(k$withinss)
-#[1] "numeric"
-#> class(k$tot.withinss)
-#[1] "numeric"
-#> class(k$betweenss)
-#[1] "numeric"
-#> class(k$size)
-#[1] "integer"
-#> class(k)
-#[1] "kmeans"
-
-
-#data <-read.table("C:/Users/ww/Documents/cluster/noisy7.tsv")
-#k <- 5
-#km <- kmeans(data, k)
-
-
 ######## add result #######
 #引数：データ(data, data.frame)、kmeansの結果(km)、kの数(k, integer)
 #返り値：list
 #			list[1] 結果がくっついたdata.frame
 #			list[[2]][[n]] kmeansの結果、nクラスターに割り当てられた要素だけのdata.frame
-		
 addresult <- function(data, km, k){
 	result_data <- cbind(data, km$cluster)
 	result_list <- list(result_data)
@@ -88,8 +64,71 @@ si <- function (www, bbb){
 	s
 }
 
+############cluster = sample############
+clus_samp <- function(data){
+	km1 <-  kmeans(data, 1)
+	ggg <- 0
+	for(g in 1:row(data)){
+		d <- rbind(data[g,], km1$centers)
+		dt <- dist(d)
+		d2 <- dt[1]^2
+		ggg <- ggg + d2
+	}
+	g <- ggg / (nrow(data)*nrow(data))
+	
+	sg <- exp(1)^exp(1)^g
+	sfg <- 1 - (1/sg)
+	sfg
+}
 
 
+####################################
+####################################
+####################################
+
+#inputdata <- readtable.......
+
+#kmenasは要素数＝クラスタ数が無理
+datanum <- nrow(inputdata) -1
+
+sfc<-list()
+
+for (n 1:datanum){
+	kms <- kmeans(inputdata, n)
+	ad <- addresult(inputdata, kms, n)
+	w_num <- wcd(n, ad, kms)
+	b_num <- bcd(input_data, n, ad, kms)
+	si_num <- si(w_num, b_num)
+	sfc[[length(sfc+1)]] <- si_num
+}
+sfc[[length(sfc+1)]] <- clus_samp(inputdata)
+
+sfc
+#www<-c(do.call("cbind",sfc))
+#plot(www)
+
+
+#> class(k$cluster)
+#[1] "integer"
+#> class(k$centers)
+#[1] "matrix"
+#> class(k$totss)
+#[1] "numeric"
+#> class(k$withinss)
+#[1] "numeric"
+#> class(k$tot.withinss)
+#[1] "numeric"
+#> class(k$betweenss)
+#[1] "numeric"
+#> class(k$size)
+#[1] "integer"
+#> class(k)
+#[1] "kmeans"
+
+
+#data <-read.table("C:/Users/ww/Documents/cluster/noisy7.tsv")
+#k <- 5
+#km <- kmeans(data, k)
 
 
 git add file
