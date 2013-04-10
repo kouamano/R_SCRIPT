@@ -49,7 +49,7 @@ wcd <- function(k, listed, km){
 			row_1 <- listed[[2]][[i]][j,]
 			len <- length(row_1)
 			cutlast <- row_1[, -len[1]]
-			cluc <- rbind(km$center[i,], cutlast)
+			cluc <- rbind(km$centers[i,], cutlast)
 			dis <- dist(cluc)
 			dis2 <- dis[1]^2
 			count <- count + dis2
@@ -62,15 +62,35 @@ wcd <- function(k, listed, km){
 	w
 }
 
-
-
 ############BCD############
-#引数：
-#返り値：
-bcd <- function(){
-
-
+#引数：データ(data, data.frame)、kの数(k, integer), kmeansの結果(km)
+#返り値：bcdの値
+bcd <- function(data, k, listed, km){
+	ke1 <- kmeans(data, 1)
+	
+	bb <- 0
+	for (i in 1:k){
+		bind_center <- rbind(km$centers[i,], ke1$centers)
+		d_center <- dist(bind_center)
+		d2 <- (d_center[1]^2) * km$size[i]
+		bb <- bb / d2
+	}
+	b <- bb / (k * nrow(data))
+	b
 }
+
+############SI############
+#引数：wcd,bcdの値(www, bbb)
+#返り値：SIの値
+si <- function (www, bbb){
+	ss <- exp(1)^exp(1)^(bbb-www)
+	s <- 1 - (1/s)
+	s
+}
+
+
+
+
 
 git add file
 git commit
