@@ -41,7 +41,7 @@ wcd <- function(k, listed, km){
 ############BCD############
 #引数：データ(data, data.frame)、kの数(k, integer), kmeansの結果(km)
 #返り値：bcdの値
-bcd <- function(data, k, listed, km){
+bcd <- function(data, k, km){
 	ke1 <- kmeans(data, 1)
 	
 	bb <- 0
@@ -49,7 +49,7 @@ bcd <- function(data, k, listed, km){
 		bind_center <- rbind(km$centers[i,], ke1$centers)
 		d_center <- dist(bind_center)
 		d2 <- (d_center[1]^2) * km$size[i]
-		bb <- bb / d2
+		bb <- bb + d2
 	}
 	b <- bb / (k * nrow(data))
 	b
@@ -60,7 +60,7 @@ bcd <- function(data, k, listed, km){
 #返り値：SIの値
 si <- function (www, bbb){
 	ss <- exp(1)^exp(1)^(bbb-www)
-	s <- 1 - (1/s)
+	s <- 1 - (1/ss)
 	s
 }
 
@@ -68,7 +68,7 @@ si <- function (www, bbb){
 clus_samp <- function(data){
 	km1 <-  kmeans(data, 1)
 	ggg <- 0
-	for(g in 1:row(data)){
+	for(g in 1:nrow(data)){
 		d <- rbind(data[g,], km1$centers)
 		dt <- dist(d)
 		d2 <- dt[1]^2
@@ -90,22 +90,21 @@ clus_samp <- function(data){
 
 #kmenasは要素数＝クラスタ数が無理
 datanum <- nrow(inputdata) -1
-
-sfc<-list()
-
-for (n 1:datanum){
+sfc <- list()
+#for (n in 1:datanum){
+for (n in 1:8){
 	kms <- kmeans(inputdata, n)
 	ad <- addresult(inputdata, kms, n)
 	w_num <- wcd(n, ad, kms)
-	b_num <- bcd(input_data, n, ad, kms)
+	b_num <- bcd(inputdata, n, kms)
 	si_num <- si(w_num, b_num)
-	sfc[[length(sfc+1)]] <- si_num
+	sfc[length(sfc)+1] <- si_num
 }
-sfc[[length(sfc+1)]] <- clus_samp(inputdata)
+sfc[length(sfc)+1] <- clus_samp(inputdata)
 
 sfc
-#www<-c(do.call("cbind",sfc))
-#plot(www)
+www<-c(do.call("cbind",sfc))
+plot(www)
 
 
 #> class(k$cluster)
