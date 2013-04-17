@@ -100,7 +100,16 @@ clus_samp <- function(data){
         sfg
 }
 
-sf <- function(loop, inputdata){
+sf_single <- function(inputdata, k){
+	kms <- kmeans(inputdata, k)
+	ad <- addresult(inputdata, kms, k)
+	w_num <- wcd(k, ad, kms)
+	b_num <- bcd(inputdata, k, kms)
+	si_s <- si(w_num, b_num)
+	si_s
+}
+
+sf_loop <- function(inputdata, loop){
         sfc_looped <- list()
         datanum <- nrow(inputdata) -1
 
@@ -108,14 +117,9 @@ sf <- function(loop, inputdata){
                 sfc <- list()
 
                 for (n in 1:datanum){
-                        kms <- kmeans(inputdata, n)
-                        ad <- addresult(inputdata, kms, n)
-                        w_num <- wcd(n, ad, kms)
-                        b_num <- bcd(inputdata, n, kms)
-                        si_num <- si(w_num, b_num)
+						si_num <- si_s(inputdata, n)
                         sfc[length(sfc)+1] <- si_num
                 }
-
                 for(y in 1:length(sfc)){
                         if (m ==1){
                                 sfc_looped <- sfc
