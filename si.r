@@ -86,7 +86,7 @@ clus_samp <- function(data){
 ####################################
 ####################################
 
-sfc <- function(loop, inputdata){
+sf <- function(loop, inputdata){
 	sfc_looped <- list()
 	datanum <- nrow(inputdata) -1
 
