@@ -86,77 +86,40 @@ clus_samp <- function(data){
 ####################################
 ####################################
 
+sfc <- function(loop, inputdata){
+	sfc_looped <- list()
+	datanum <- nrow(inputdata) -1
 
-if(0){
-#ループしないならこっち
-inputdata <- readtable.......
-#kmenasは要素数＝クラスタ数が無理
-datanum <- nrow(inputdata) -1
-sfc <- list()
-#for (n in 1:datanum){
-for (n in 1:8){
-	kms <- kmeans(inputdata, n)
-	ad <- addresult(inputdata, kms, n)
-	w_num <- wcd(n, ad, kms)
-	b_num <- bcd(inputdata, n, kms)
-	si_num <- si(w_num, b_num)
-	sfc[length(sfc)+1] <- si_num
-}
-sfc[length(sfc)+1] <- clus_samp(inputdata)
-sfc
-www<-c(do.call("cbind",sfc))
-plot(www)
-}
+	for (m in 1:loop){
+		sfc <- list()
 
-
-if(0){
-#ループするならこっち
-#inputdataにdata.frameの形式でデータを入れる
-#inputdata <- readtable.......
-
-#kmenasは要素数＝クラスタ数が無理
-datanum <- nrow(inputdata) -1
-
-#ループ回数
-x <- 10
-
-sfc_looped <- list()
-for (m in 1:x){
-	sfc <- list()
-
-#次のどちらかで、データ数が多いなら下
-#	for (n in 1:datanum){
-#	for (n in 1:5){
-		kms <- kmeans(inputdata, n)
-		ad <- addresult(inputdata, kms, n)
-		w_num <- wcd(n, ad, kms)
-		b_num <- bcd(inputdata, n, kms)
-		si_num <- si(w_num, b_num)
-		sfc[length(sfc)+1] <- si_num
-	}
-	
-	for(y in 1:length(sfc)){
-		if (m ==1){
-			sfc_looped <- sfc
-		} else if (sfc_looped[[y]] < sfc[[y]]){
-			sfc_looped[[y]] <- sfc[[y]]
+		for (n in 1:datanum){
+			kms <- kmeans(inputdata, n)
+			ad <- addresult(inputdata, kms, n)
+			w_num <- wcd(n, ad, kms)
+			b_num <- bcd(inputdata, n, kms)
+			si_num <- si(w_num, b_num)
+			sfc[length(sfc)+1] <- si_num
 		}
-	}
 	
+		for(y in 1:length(sfc)){
+			if (m ==1){
+				sfc_looped <- sfc
+			} else if (sfc_looped[[y]] < sfc[[y]]){
+				sfc_looped[[y]] <- sfc[[y]]
+			}
+		}
+	
+	}
+	sfc_looped[length(sfc_looped)+1] <- clus_samp(inputdata)
+	sfc_looped
 }
-sfc_looped[length(sfc_looped)+1] <- clus_samp(inputdata)
-
-www<-c(do.call("cbind",sfc_looped))
-plot(www)
-}
 
 
+#www<-c(do.call("cbind",sfc_looped))
+#plot(www)
 
-
-git add file
-git commit
-git push origin master
-
-
-
+#git add file
+#git commit
+#git push origin master
 
