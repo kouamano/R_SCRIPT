@@ -19,14 +19,28 @@ ca_wcd <- function(k, listed, km){
                         cutlast <- row_1[, -len[1]]
                         cluc <- rbind(km$centers[i,], cutlast)
                         dis <- dist(cluc)
-                        dis2 <- dis[1]^2
-                        count <- count + dis2
+                        count <- count + dis
                 }
-                waru[j] <- count/km$size[i]
+                waru[i] <- count/km$size[i]
         }
 		waru
 }
 
+center_dis <- function(data){
+	k1 <- kmeans(data, 1)
+	all_dist <- 0
+	
+	data_num <- nrow(data)
+
+	for(i in 1:data_num){
+		d <- rbind(data[i,],k1$centers)
+		ds <- dist(d)
+		all_dist <- all_dist + ds[1]
+	}
+	cent <- all_dist / data_num
+
+	cent
+}
 
 wcd <- function(k, listed, km){
         all_sq <- 0
@@ -86,7 +100,16 @@ clus_samp <- function(data){
         sfg
 }
 
-sf <- function(loop, inputdata){
+sf_single <- function(inputdata, k){
+	kms <- kmeans(inputdata, k)
+	ad <- addresult(inputdata, kms, k)
+	w_num <- wcd(k, ad, kms)
+	b_num <- bcd(inputdata, k, kms)
+	si_s <- si(w_num, b_num)
+	si_s
+}
+
+sf_loop <- function(inputdata, loop){
         sfc_looped <- list()
         datanum <- nrow(inputdata) -1
 
@@ -94,14 +117,9 @@ sf <- function(loop, inputdata){
                 sfc <- list()
 
                 for (n in 1:datanum){
-                        kms <- kmeans(inputdata, n)
-                        ad <- addresult(inputdata, kms, n)
-                        w_num <- wcd(n, ad, kms)
-                        b_num <- bcd(inputdata, n, kms)
-                        si_num <- si(w_num, b_num)
+						si_num <- si_s(inputdata, n)
                         sfc[length(sfc)+1] <- si_num
                 }
-
                 for(y in 1:length(sfc)){
                         if (m ==1){
                                 sfc_looped <- sfc
