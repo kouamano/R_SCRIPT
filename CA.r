@@ -1,11 +1,6 @@
-ca_clNsumples <- function(listed){
-}
 
-CA1 <- function(clinf){
-	N <- clinf[[1]];
-	R <- clinf[[2]];
-	Cn <- clinf[[3]];
-	rn <- clinf[[4]];
+
+CA1 <- function(N,R,Cn,rn){
 	rn = rn/R;
 	list(Cn,
 	rn,
