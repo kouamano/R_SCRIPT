@@ -1,8 +1,4 @@
-###addresult###
-#引数：データ(data, data.frame)、kmeansの結果(km)、kの数(k, integer)
-#返り値：list
-#                       list[1] 結果がくっついたdata.frame
-#                       list[[2]][[n]] kmeansの結果、nクラスターに割り当てられた要素だけのdata.frame
+
 addresult <- function(data, km, k){
         result_data <- cbind(data, km$cluster)
         result_list <- list(result_data)
@@ -11,9 +7,27 @@ addresult <- function(data, km, k){
         listed
 }
 
-###WCD###
-#引数：kの数(k, integer), addresultの引数(listed, list)、kmeansの結果(km)
-#返り値：wcdの値
+ca_wcd <- function(k, listed, km){
+        all_sq <- 0
+        w <- 0
+		waru <- numeric(k)
+        for (i in 1:k){
+                count <- 0
+                for (j in 1:nrow(listed[[2]][[i]])){
+                        row_1 <- listed[[2]][[i]][j,]
+                        len <- length(row_1)
+                        cutlast <- row_1[, -len[1]]
+                        cluc <- rbind(km$centers[i,], cutlast)
+                        dis <- dist(cluc)
+                        dis2 <- dis[1]^2
+                        count <- count + dis2
+                }
+                waru[j] <- count/km$size[i]
+        }
+		waru
+}
+
+
 wcd <- function(k, listed, km){
         all_sq <- 0
         w <- 0
@@ -36,9 +50,6 @@ wcd <- function(k, listed, km){
         w
 }
 
-###BCD###
-#引数：データ(data, data.frame)、kの数(k, integer), kmeansの結果(km)
-#返り値：bcdの値
 bcd <- function(data, k, km){
         ke1 <- kmeans(data, 1)
 
@@ -53,16 +64,12 @@ bcd <- function(data, k, km){
         b
 }
 
-###SI###
-#引数：wcd,bcdの値(www, bbb)
-#返り値：SIの値
 si <- function (www, bbb){
         ss <- exp(1)^exp(1)^(bbb-www)
         s <- 1 - (1/ss)
         s
 }
 
-###cluster = sample###
 clus_samp <- function(data){
         km1 <-  kmeans(data, 1)
         ggg <- 0
@@ -79,7 +86,6 @@ clus_samp <- function(data){
         sfg
 }
 
-###SF###
 sf <- function(loop, inputdata){
         sfc_looped <- list()
         datanum <- nrow(inputdata) -1
@@ -108,6 +114,3 @@ sf <- function(loop, inputdata){
         sfc_looped[length(sfc_looped)+1] <- clus_samp(inputdata)
         sfc_looped
 }
-
-
-
