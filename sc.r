@@ -146,5 +146,34 @@ amano_index <- function(data,k){
 	result
 }
 
+amano_index_loop <- function(inputdata,loop){
+	a_loop <- list()
+	datanum <- nrow(inputdata) -1
+
+	k1 <- kmeans(inputdata,1)
+
+	for(m in 1:loop){
+		a_list <- list()
+
+		for(n in 1:datanum){
+			a_result <- a_index(inputdata,n,k1)
+			a_list[length(a_list)+1] <- a_result
+		}
+		
+		if(m == 1){
+			a_loop <- a_list
+		}else{
+			for (y in 1:length(a_list)){
+				if(a_loop[y] > a_list[y]){
+					a_loop[y] <- a_list[y]
+				}
+			}
+		}
+	}
+	a_loop
+}
+
+
+
 
 
