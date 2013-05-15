@@ -1,5 +1,5 @@
-source("sf.r")
-source("CA.r")
+source("./sf.r")
+source("./CA.r")
 
 CA_loop <- function(inputdata, loop){
         ca_looped <- list()
