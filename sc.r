@@ -148,7 +148,8 @@ amano_index <- function(data,k){
 
 amano_index_loop <- function(inputdata,loop){
 	a_loop <- list()
-	datanum <- nrow(inputdata) -1
+#	datanum <- nrow(inputdata) -1
+	datanum <- 10
 
 	k1 <- kmeans(inputdata,1)
 
@@ -164,8 +165,8 @@ amano_index_loop <- function(inputdata,loop){
 			a_loop <- a_list
 		}else{
 			for (y in 1:length(a_list)){
-				if(a_loop[y] > a_list[y]){
-					a_loop[y] <- a_list[y]
+				if(a_loop[[y]] < a_list[[y]]){
+					a_loop[[y]] <- a_list[[y]]
 				}
 			}
 		}
