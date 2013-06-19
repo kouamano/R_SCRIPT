@@ -253,18 +253,19 @@ wcsd_po <- function(data, p, dim_r){
 
 
 ##################################################
-dir_index <- function(){
+dir_index <- function(p=2, m=1){
 	file_name <- list.files()
 
 	tab <- lapply(list.files(pattern="tsv"), read.table)
 	tab_num <- length(tab)
 
-	all <- data.frame(SF=0, WCSD=0)
+	all <- data.frame(SF=0, WCSD=0, WCSD_M=0)
 
 	for(i in 1:tab_num){
 		sf_r <- SF(tab[[i]])
 		wcsd_r <- wcsd(tab[[i]])
-		all <- rbind(all, c(sf_r, wcsd_r))
+		wcsd_m_r <- wcsd_m(tab[[i]],p,m)
+		all <- rbind(all, c(sf_r, wcsd_r,wcsd_m_r))
 	}
 	file_name <- data.frame(file_name)
 	all <- all[-1,]
