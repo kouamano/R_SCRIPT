@@ -254,28 +254,8 @@ wcsd_po <- function(data, p, dim_r){
 
 ##################################################
 dir_index <- function(){
-	tab <- list.files()
-	
+	t <- list.files()
 
-#####ここから組む，ファイル名を得られるので，その後indexを適用．これが完成したらしたの関数は消す
-
-
-	tab_num <- length(tab)
-
-	all <- data.frame(SF=0, WCSD=0)
-
-	for(i in 1:tab_num){
-		sf_r <- SF(tab[[i]])
-		wcsd_r <- wcsd(tab[[i]])
-		all <- rbind(all, c(sf_r, wcsd_r))
-	}
-	all
-}
-
-
-
-##################################################
-dir_index_s <- function(){
 	tab <- lapply(list.files(pattern="tsv"), read.table)
 	tab_num <- length(tab)
 
@@ -286,7 +266,11 @@ dir_index_s <- function(){
 		wcsd_r <- wcsd(tab[[i]])
 		all <- rbind(all, c(sf_r, wcsd_r))
 	}
-	all
+	t <- data.frame(t)
+	all <- all[-1,]
+
+	cbind(t,all)
+
 }
 
 
