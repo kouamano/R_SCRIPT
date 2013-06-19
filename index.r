@@ -1,4 +1,4 @@
-﻿
+
 #正解データがついたデータを受けとって，正解ついたまま各クラスタごとに分割
 #[[1]]で各クラスタのデータフレームにアクセス
 split_by_result <- function(data){
@@ -254,7 +254,7 @@ wcsd_po <- function(data, p, dim_r){
 
 ##################################################
 dir_index <- function(){
-	t <- list.files()
+	file_name <- list.files()
 
 	tab <- lapply(list.files(pattern="tsv"), read.table)
 	tab_num <- length(tab)
@@ -266,10 +266,10 @@ dir_index <- function(){
 		wcsd_r <- wcsd(tab[[i]])
 		all <- rbind(all, c(sf_r, wcsd_r))
 	}
-	t <- data.frame(t)
+	file_name <- data.frame(file_name)
 	all <- all[-1,]
 
-	cbind(t,all)
+	cbind(file_name,all)
 
 }
 
