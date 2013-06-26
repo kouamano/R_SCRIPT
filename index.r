@@ -253,19 +253,106 @@ wcsd_po <- function(data, p, dim_r){
 
 
 ##################################################
+wcsd_s <-function(data){
+	split_r <- split_by_result(data)
+	zk_r <- Zk(split_r)
+	knum_r <- k_num(split_r)
+	ztot_r <- Ztot(data)
+	nk_r <- nk(split_r)
+	alln_r <- all_n(data)
+	dim_r <- dim(data)
+
+	rk_r<- rk(zk_r, nk_r, split_r)
+	dk_r <- dk(zk_r, ztot_r)
+	Ra_r <- Ra(ztot_r, data)
+	
+
+	all_1 <- 0
+	for(i in 1:knum_r){
+		m <- dk_r[i] / Ra_r
+		all_1 <- all_1 + m
+	}
+
+	all_2 <- 0
+	for(i in 1:knum_r){
+		m <- -((rk_r[i] / Ra_r)^dim_r)
+		mm <- nk_r[i,]^m
+		all_2 <- all_2 + mm
+	}
+
+	k2 <- knum_r^3
+
+	r_r <- (all_1 * all_2) / k2
+	r_r
+}
+
+##################################################
+wcs_p <-function(data){
+	split_r <- split_by_result(data)
+	zk_r <- Zk(split_r)
+	knum_r <- k_num(split_r)
+	ztot_r <- Ztot(data)
+	nk_r <- nk(split_r)
+	alln_r <- all_n(data)
+
+	rk_r<- rk(zk_r, nk_r, split_r)
+	dk_r <- dk(zk_r, ztot_r)
+	Ra_r <- Ra(ztot_r, data)
+
+
+
+	all <- 1
+	for(i in 1:knum_r){
+		m <- rk_r[i] / Ra_r
+		mm <- nk_r[i,]^m
+		all <- all * mm
+	}
+
+	r_r <- all * knum_r
+	r_r
+
+}
+
+##################################################
+wcs_n <-function(data){
+	split_r <- split_by_result(data)
+	zk_r <- Zk(split_r)
+	knum_r <- k_num(split_r)
+	ztot_r <- Ztot(data)
+	nk_r <- nk(split_r)
+	alln_r <- all_n(data)
+
+	rk_r<- rk(zk_r, nk_r, split_r)
+	dk_r <- dk(zk_r, ztot_r)
+	Ra_r <- Ra(ztot_r, data)
+
+	all <- 1
+	for(i in 1:knum_r){
+		m <- -(rk_r[i] / Ra_r)
+		mm <- nk_r[i,]^m
+		all <- all * mm
+	}
+
+	r_r <- all / knum_r
+	r_r
+
+}
+
+##################################################
 dir_index <- function(p=2, m=1){
 	file_name <- list.files()
 
 	tab <- lapply(list.files(pattern="tsv"), read.table)
 	tab_num <- length(tab)
 
-	all <- data.frame(SF=0, WCSD=0, WCSD_M=0)
+	all <- data.frame(SF=0, WCSD=0, WCS_P=0, WCS_N=0)
 
 	for(i in 1:tab_num){
 		sf_r <- SF(tab[[i]])
 		wcsd_r <- wcsd(tab[[i]])
-		wcsd_m_r <- wcsd_m(tab[[i]],p,m)
-		all <- rbind(all, c(sf_r, wcsd_r,wcsd_m_r))
+		wcs_p_r <- wcs_p(tab[[i]])
+		wcs_n_r <- wcs_n(tab[[i]])
+		all <- rbind(all, c(sf_r, wcsd_r,wcs_p_r,wcs_n_r))
 	}
 	file_name <- data.frame(file_name)
 	all <- all[-1,]
