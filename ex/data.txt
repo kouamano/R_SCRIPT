@@ -1,0 +1,8 @@
+"ex.csv"
+c1<- array(c(rnorm(200),rnorm(200)), c(200,2))
+c2<- array(c(rnorm(200)+3,rnorm(200)+3), c(200,2))
+c2<- array(c(rnorm(200)-3,rnorm(200)+3), c(200,2))
+c3<- array(c(rnorm(200),rnorm(200)+5), c(200,2))
+
+
+
