@@ -32,7 +32,6 @@ all_n <- function(data){
 #各データから，同一クラスタ内の他のデータへの最小距離を求める
 #入力：同一クラスタの全データ（正解クラスタ付き）
 #出力：入力されたクラスタにおける平均距離
-
 mini_dis <- function(c_data){
 	n <- ncol(c_data)
 	r <- nrow(c_data)
@@ -126,6 +125,69 @@ min_index <- function(data){
 	x <- cl_mean(data)
 	y <- mean_min_dis(data)
 	z <- y / x
+	z
+}
+
+
+mini2_dis <- function(c_data){
+	n <- ncol(c_data)
+	r <- nrow(c_data)
+	d_data <- as.matrix(dist(c_data[,-n]))
+	
+	long <- 0
+	for(n in 1:r){
+		row_data <- d_data[n,]
+		min_long <- min(row_data[-n])
+		long <- long + min_long
+	}
+	dd <- 1 / r
+	ddd <- dd^long
+	ddd
+}
+
+mean2_min_dis <- function(data){
+	listdata <- split_by_result(data)
+	kn <- k_num(listdata)
+
+	long <- 1
+	for(i in 1:kn){
+		dmin <- mini2_dis(listdata[[i]])
+		long <- long * dmin
+	}
+	d <- 1 / kn
+	dd <- long^d
+	dd
+}
+
+cl2_mean <- function(data){
+	listdata <- split_by_result(data)
+	kn <- k_num(listdata)
+	
+	long <- 0
+	for(i in 1:kn){
+		minlong <- 0
+		for(j in 1:kn){
+			if(i != j){
+				dmin <- cl_dis(listdata[[i]], listdata[[j]])
+				if((i == 1) || (j == 1)){
+					minlong <- dmin
+				} else if (dmin < minlong) {
+					minlong <- dmin
+				}
+			}
+		}
+		long <- long + minlong
+	}
+	d <- 1 / long
+	dd <- d^kn
+	dd
+}
+
+
+min2_index <- function(data){
+	x <- cl2_mean(data)
+	y <- mean2_min_dis(data)
+	z <- x * y
 	z
 }
 
