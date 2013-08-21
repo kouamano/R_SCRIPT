@@ -29,9 +29,9 @@ all_n <- function(data){
 	d
 }
 
-#各データから，同一クラスタ内の他のデータへの最小距離を求める
+#各データから，同一クラスタ内の他のデータへの最小距離の平均を求める
 #入力：同一クラスタの全データ（正解クラスタ付き）
-#出力：入力されたクラスタにおける平均距離
+#出力：入力されたクラスタにおける最小距離平均
 mini_dis <- function(c_data){
 	n <- ncol(c_data)
 	r <- nrow(c_data)
@@ -120,7 +120,7 @@ cl_mean <- function(data){
 
 #最小距離同士の掛け合わせ
 #入力：正解付きデータ
-#出力：値
+#出力：値　小さいほどよい
 min_index <- function(data){
 	x <- cl_mean(data)
 	y <- mean_min_dis(data)
@@ -128,7 +128,9 @@ min_index <- function(data){
 	z
 }
 
-
+#各データから，同一クラスタ内の他のデータへの最小距離の平均を指数にする
+#入力：同一クラスタの全データ（正解クラスタ付き）
+#出力：（１/データ数）＾mini_dis
 mini2_dis <- function(c_data){
 	n <- ncol(c_data)
 	r <- nrow(c_data)
@@ -145,6 +147,9 @@ mini2_dis <- function(c_data){
 	ddd
 }
 
+#全データの，同一クラスタ内の他のデータへの最小距離の平均
+#入力：正解付きデータ
+#出力：平均最小距離
 mean2_min_dis <- function(data){
 	listdata <- split_by_result(data)
 	kn <- k_num(listdata)
@@ -178,12 +183,12 @@ cl2_mean <- function(data){
 		}
 		long <- long + minlong
 	}
-	d <- 1 / long
-	dd <- d^kn
+	d <- 1 / kn
+	dd <- d^long
 	dd
 }
 
-
+#尺度2つめ, 小さいほどよい
 min2_index <- function(data){
 	x <- cl2_mean(data)
 	y <- mean2_min_dis(data)
@@ -192,23 +197,19 @@ min2_index <- function(data){
 }
 
 
-
-
-
-
-
 ##################################################
-dir_minindex <- function(){
+dir_minindex <- function(p=2){
 	file_name <- list.files()
 
 	tab <- lapply(list.files(pattern="tsv"), read.table)
 	tab_num <- length(tab)
 
-	all <- data.frame(MIN=0)
+	all <- data.frame(MIN=0, MIN2=0)
 
 	for(i in 1:tab_num){
 		m_i <- min_index(tab[[i]])
-		all <- rbind(all, m_i)
+		m2_i <- min2_index(tab[[i]])
+		all <- rbind(all, c(m_i, m2_i))
 	}
 	file_name <- data.frame(file_name)
 	all <- all[-1,]
@@ -216,6 +217,11 @@ dir_minindex <- function(){
 	cbind(file_name,all)
 
 }
+
+
+
+
+
 
 
 
