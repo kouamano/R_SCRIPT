@@ -134,33 +134,40 @@ min_index <- function(data){
 mini2_dis <- function(c_data){
 	n <- ncol(c_data)
 	r <- nrow(c_data)
-	d_data <- as.matrix(dist(c_data[,-n]))
+
+	if(r == 1){
+		dd <- 0
+		dd
+	}else{
+		d_data <- as.matrix(dist(c_data[,-n]))
 	
-	long <- 0
-	for(n in 1:r){
-		row_data <- d_data[n,]
-		min_long <- min(row_data[-n])
-		long <- long + min_long
+		long <- 0
+		for(n in 1:r){
+			row_data <- d_data[n,]
+			min_long <- min(row_data[-n])
+			long <- long + min_long
+		}
+		dd <- 1 / r
+		ddd <- dd^long
+		ddd
 	}
-	dd <- 1 / r
-	ddd <- dd^long
-	ddd
 }
 
-#全データの，同一クラスタ内の他のデータへの最小距離の平均
+#全データの，同一クラスタ内の他のデータへの最小距離の平均(指数版)
 #入力：正解付きデータ
 #出力：平均最小距離
 mean2_min_dis <- function(data){
+	r <- nrow(data)
 	listdata <- split_by_result(data)
 	kn <- k_num(listdata)
 
-	long <- 1
+	long <- 0
 	for(i in 1:kn){
 		dmin <- mini2_dis(listdata[[i]])
-		long <- long * dmin
+		long <- long + dmin
 	}
-	d <- 1 / kn
-	dd <- long^d
+	d <- long / kn
+	dd <- (1/kn)^d
 	dd
 }
 
@@ -183,6 +190,7 @@ cl2_mean <- function(data){
 		}
 		long <- long + minlong
 	}
+	long <- long / kn
 	d <- 1 / kn
 	dd <- d^long
 	dd
@@ -196,6 +204,57 @@ min2_index <- function(data){
 	z
 }
 
+#min_indexの分子だけ使用
+min3_index <- function(data){
+	x <- mean_min_dis(data)
+	kn <- k_num(data)
+	z <- x * kn
+	z
+}
+
+#min2_indexの分子の一部のみ
+#大きいほどよい
+min4_index <- function(data){
+
+	r <- nrow(data)
+	listdata <- split_by_result(data)
+	kn <- k_num(listdata)
+
+	long <- 0
+	for(i in 1:kn){
+		dmin <- mini4_dis(listdata[[i]])
+		long <- long + dmin
+	}
+	d <- long
+	d
+}
+
+mini4_dis <- function(c_data){
+	d_mean <- mean(dist(data[,-n]))
+
+	n <- ncol(c_data)
+	r <- nrow(c_data)
+
+	if(r == 1){
+		dd <- 0
+		dd
+	}else{
+		d_data <- as.matrix(dist(c_data[,-n]))
+	
+		long <- 0
+		for(n in 1:r){
+			row_data <- d_data[n,]
+			min_long <- min(row_data[-n])
+			min_long <- min_long / d_mean
+			long <- long + min_long
+		}
+		dd <- 1 / r
+		ddd <- dd^long
+		ddd
+	}
+}
+
+
 
 ##################################################
 dir_minindex <- function(p=2){
@@ -204,12 +263,14 @@ dir_minindex <- function(p=2){
 	tab <- lapply(list.files(pattern="tsv"), read.table)
 	tab_num <- length(tab)
 
-	all <- data.frame(MIN=0, MIN2=0)
+	all <- data.frame(MIN=0, MIN2=0, MIN3=0, MIN4=0)
 
 	for(i in 1:tab_num){
 		m_i <- min_index(tab[[i]])
 		m2_i <- min2_index(tab[[i]])
-		all <- rbind(all, c(m_i, m2_i))
+		m3_i <- min3_index(tab[[i]])
+		m4_i <- min4_index(tab[[i]])
+		all <- rbind(all, c(m_i, m2_i, m3_i, m4_i))
 	}
 	file_name <- data.frame(file_name)
 	all <- all[-1,]
