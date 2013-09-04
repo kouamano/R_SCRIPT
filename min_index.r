@@ -205,6 +205,7 @@ min2_index <- function(data){
 }
 
 #min_indexの分子だけ使用
+#小さいほどよい
 min3_index <- function(data){
 	x <- mean_min_dis(data)
 	kn <- k_num(data)
@@ -229,11 +230,12 @@ min4_index <- function(data){
 	d
 }
 
-mini4_dis <- function(c_data){
-	d_mean <- mean(dist(data[,-n]))
 
+mini4_dis <- function(c_data){
 	n <- ncol(c_data)
 	r <- nrow(c_data)
+
+	d_mean <- mean(dist(c_data[,-n]))
 
 	if(r == 1){
 		dd <- 0
@@ -255,6 +257,40 @@ mini4_dis <- function(c_data){
 }
 
 
+#小さいほどよい
+min5_index <- function(data){
+	r <- nrow(data)
+	listdata <- split_by_result(data)
+	kn <- k_num(listdata)
+
+	long <- 0
+	for(i in 1:kn){
+		dmin <- mini5_dis(listdata[[i]])
+		long <- long + dmin
+	}
+	
+	z <- long / r
+	z
+}
+
+mini5_dis <- function(c_data){
+	n <- ncol(c_data)
+	r <- nrow(c_data)
+	d_data <- as.matrix(dist(c_data[,-n]))
+	
+	long <- 0
+	for(n in 1:r){
+		row_data <- d_data[n,]
+		min_long <- min(row_data[-n])
+		long <- long + min_long
+	}
+	long
+}
+
+
+
+
+
 
 ##################################################
 dir_minindex <- function(p=2){
@@ -263,14 +299,15 @@ dir_minindex <- function(p=2){
 	tab <- lapply(list.files(pattern="tsv"), read.table)
 	tab_num <- length(tab)
 
-	all <- data.frame(MIN=0, MIN2=0, MIN3=0, MIN4=0)
+	all <- data.frame(MIN=0, MIN2=0, MIN3=0, MIN4=0, MIN5=0)
 
 	for(i in 1:tab_num){
 		m_i <- min_index(tab[[i]])
 		m2_i <- min2_index(tab[[i]])
 		m3_i <- min3_index(tab[[i]])
 		m4_i <- min4_index(tab[[i]])
-		all <- rbind(all, c(m_i, m2_i, m3_i, m4_i))
+		m5_i <- min5_index(tab[[i]])
+		all <- rbind(all, c(m_i, m2_i, m3_i, m4_i, m5_i))
 	}
 	file_name <- data.frame(file_name)
 	all <- all[-1,]
