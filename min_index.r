@@ -102,11 +102,13 @@ cl_mean <- function(data){
 	long <- 0
 	for(i in 1:kn){
 		minlong <- 0
+		fl <- 0
 		for(j in 1:kn){
 			if(i != j){
 				dmin <- cl_dis(listdata[[i]], listdata[[j]])
-				if((i == 1) || (j == 1)){
+				if(fl == 0){
 					minlong <- dmin
+					fl <- 1
 				} else if (dmin < minlong) {
 					minlong <- dmin
 				}
@@ -178,11 +180,13 @@ cl2_mean <- function(data){
 	long <- 0
 	for(i in 1:kn){
 		minlong <- 0
+		fl <- 0
 		for(j in 1:kn){
 			if(i != j){
 				dmin <- cl_dis(listdata[[i]], listdata[[j]])
-				if((i == 1) || (j == 1)){
+				if(fl == 0){
 					minlong <- dmin
+					fl <- 1
 				} else if (dmin < minlong) {
 					minlong <- dmin
 				}
@@ -207,10 +211,11 @@ min2_index <- function(data){
 #min_indexの分子だけ使用
 #小さいほどよい
 min3_index <- function(data){
+	listdata <- split_by_result(data)
+	kn <- k_num(listdata)
+
 	x <- mean_min_dis(data)
-	kn <- k_num(data)
-	z <- x * kn
-	z
+	x
 }
 
 #min2_indexの分子の一部のみ
@@ -235,7 +240,8 @@ mini4_dis <- function(c_data){
 	n <- ncol(c_data)
 	r <- nrow(c_data)
 
-	d_mean <- mean(dist(c_data[,-n]))
+#	d_mean <- mean(dist(c_data[,-n]))
+#正規化は当面考えない
 
 	if(r == 1){
 		dd <- 0
@@ -247,7 +253,7 @@ mini4_dis <- function(c_data){
 		for(n in 1:r){
 			row_data <- d_data[n,]
 			min_long <- min(row_data[-n])
-			min_long <- min_long / d_mean
+#			min_long <- min_long / d_mean
 			long <- long + min_long
 		}
 		dd <- 1 / r
