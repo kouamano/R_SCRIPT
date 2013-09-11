@@ -269,7 +269,7 @@ min5_index <- function(data){
 		long <- long + dmin
 	}
 	
-	z <- long / r
+	z <- long / kn
 	z
 }
 
