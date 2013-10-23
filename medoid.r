@@ -15,5 +15,5 @@ medoid <- function(mat){
 	targetList=as.matrix(dist(rmat))[nrow(mat)+1,-nrow(mat)-1];
 	pos=which(targetList == min(targetList));
 	#print(pos);
-	return(mat[pos,]);
+	return(list(pos,mat[pos,]));
 }
