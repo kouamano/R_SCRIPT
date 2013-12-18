@@ -111,13 +111,14 @@ sf_single <- function(inputdata, k){
 
 sf_loop <- function(inputdata, loop){
         sfc_looped <- list()
-        datanum <- nrow(inputdata) -1
+#        datanum <- nrow(inputdata) -1
+		datanum <- 20
 
         for (m in 1:loop){
                 sfc <- list()
 
                 for (n in 1:datanum){
-						si_num <- si_s(inputdata, n)
+						si_num <- sf_single(inputdata, n)
                         sfc[length(sfc)+1] <- si_num
                 }
                 for(y in 1:length(sfc)){
@@ -132,3 +133,71 @@ sf_loop <- function(inputdata, loop){
         sfc_looped[length(sfc_looped)+1] <- clus_samp(inputdata)
         sfc_looped
 }
+
+####################################################################
+####################################################################
+
+
+sf_with_ans <- function(data){
+	ad <- addresult_a(data)
+	k <- length(ad[[2]])
+	w_num <- wcd_a(k, ad)
+	b_num <- bcd_a(k, ad)
+
+	si_s <- si(w_num, b_num)
+	si_s
+}
+
+addresult_a <- function(result_data){
+        result_list <- list(result_data)
+		lastcol <- ncol(result_data)
+        each_cluster <- split(result_data, result_data[lastcol])
+        listed <- list(result_list, each_cluster)
+        listed
+}
+
+wcd_a <- function(k, listed){
+        all_sq <- 0
+        w <- 0
+        for (i in 1:k){
+				each_c <- listed[[2]][[i]]
+				n <- ncol(each_c)
+				km <- kmeans(each_c[,-n] ,1)
+                count <- 0
+                for (j in 1:nrow(each_c)){
+                        row_1 <- each_c[j,]
+                        cutlast <- row_1[, -n]
+                        cluc <- rbind(km$centers, cutlast)
+                        dis <- dist(cluc)
+                        dis2 <- dis[1]^2
+                        count <- count + dis2
+                }
+                waru <- count/km$size
+                sq = sqrt(waru)
+                all_sq <- all_sq + sq
+        }
+        w <- all_sq / k
+        w
+}
+
+bcd_a <- function(k, listd){
+		ddata <- listd[[1]][[1]]
+		n <- ncol(ddata)
+        ke1 <- kmeans(ddata[,-n], 1)
+
+        bb <- 0
+        for (i in 1:k){
+				d_i <- listd[[2]][[i]]
+				km <- kmeans(d_i[, -n],1)
+                bind_center <- rbind(km$centers, ke1$centers)
+                d_center <- dist(bind_center)
+                d2 <- (d_center[1]^2) * km$size
+                bb <- bb + d2
+        }
+        b <- bb / (k * nrow(ddata))
+        b
+}
+
+
+
+
