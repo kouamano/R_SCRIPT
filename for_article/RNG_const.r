@@ -222,16 +222,3 @@ d_short <- function(data){
 
 
 
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-
-
-=======
->>>>>>> 39e87b68501efec8e959fa4b39a2122cdbb6f070
