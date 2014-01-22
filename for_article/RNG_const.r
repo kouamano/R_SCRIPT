@@ -1,4 +1,3 @@
-﻿
 ####################################################
 ## RNG const
 ####################################################
@@ -53,7 +52,8 @@ all_pair <- function(data){
 	pair
 }
 
-#あるペアとグラフを受け取って，全経路を出力
+
+##あるペアとグラフを受け取って全経路を出力
 pair_path <- function(pair ,graph){
 	path_can <- list(pair[1])
 	path_rec <- list()
@@ -91,7 +91,10 @@ pair_path <- function(pair ,graph){
 	path_rec
 }
 
-#全部のペアを突っ込んで，全部の経路を得る
+if(0){
+全部のペアを突っ込んで，全部の経路を得る
+使っていない
+}
 all_pair_path <- function(data){
 	all_p <- all_pair(data)
 	rng <- rng_const(data)
@@ -112,9 +115,10 @@ all_pair_path <- function(data){
 ## maxmin
 ####################################################
 
-
-#全部のペアを突っ込んで，全部の経路を得る
-#maxminも計算する
+if(0){
+全部のペアを突っ込んで，全部の経路を得る
+maxminも計算する
+}
 all_pair_path_maxmin <- function(data){
 	all_p <- all_pair(data)
 	rng <- rng_const(data)
@@ -146,7 +150,9 @@ all_pair_path_maxmin <- function(data){
 	list_path
 }
 
-#あるパスの最大のエッジ長
+if(0){
+あるパスの最大のエッジ長
+}
 max_edge <- function(path, rng){
 	max_edge <- 0
 	m <- length(path)
@@ -163,18 +169,28 @@ max_edge <- function(path, rng){
 			a2 <- ppp
 		}
 
+		max_can <- c()
 		for(i in 1:n){
-			if(rng[i,1] == a1){
-				if(rng[i,2] == a2){
-					if(max_edge < rng[i,3]){
-							max_edge <- rng[i,3]
-					}
-				}
-			}
+			x <- which((rng[i,1]==a1)&&(rng[i,2]==a2))
+			kyori <- rng[x,3]
+			max_can <- c(max_can, kyori)
 		}
 	}
+	max_edge <- max(max_can)
 	max_edge
 }
+
+
+
+#		for(i in 1:n){
+#			if(rng[i,1] == a1){
+#				if(rng[i,2] == a2){
+#					if(max_edge < rng[i,3]){
+#					
+#				}
+#			}
+#		}
+
 
 ####################################################
 ## dshort
