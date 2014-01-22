@@ -91,10 +91,9 @@ pair_path <- function(pair ,graph){
 	path_rec
 }
 
-if(0){
-全部のペアを突っ込んで，全部の経路を得る
-使っていない
-}
+#全部のペアを突っ込んで，全部の経路を得る
+#使っていない
+
 all_pair_path <- function(data){
 	all_p <- all_pair(data)
 	rng <- rng_const(data)
@@ -115,10 +114,9 @@ all_pair_path <- function(data){
 ## maxmin
 ####################################################
 
-if(0){
-全部のペアを突っ込んで，全部の経路を得る
-maxminも計算する
-}
+#全部のペアを突っ込んで，全部の経路を得る
+#maxminも計算する
+
 all_pair_path_maxmin <- function(data){
 	all_p <- all_pair(data)
 	rng <- rng_const(data)
@@ -150,15 +148,16 @@ all_pair_path_maxmin <- function(data){
 	list_path
 }
 
-if(0){
-あるパスの最大のエッジ長
-}
+
+#あるパスの最大のエッジ長
+
 max_edge <- function(path, rng){
 	max_edge <- 0
 	m <- length(path)
 	m <- m-1
 	n <- nrow(rng)
 
+	max_c <- c()
 	for(j in 1:m){
 		a1 <- path[j]
 		a2 <- path[j+1]
@@ -169,14 +168,14 @@ max_edge <- function(path, rng){
 			a2 <- ppp
 		}
 
-		max_can <- c()
-		for(i in 1:n){
-			x <- which((rng[i,1]==a1)&&(rng[i,2]==a2))
-			kyori <- rng[x,3]
-			max_can <- c(max_can, kyori)
-		}
+
+		z1 <- which(rng[,1]==a1,arr.ind=TRUE)
+		z2 <-which(rng[,2]==a2,arr.ind=TRUE)
+		x <- intersect(z1,z2)
+		kyori <- rng[x,3]
+		max_c<- append(max_c, kyori)
 	}
-	max_edge <- max(max_can)
+	max_edge <- max(max_c)
 	max_edge
 }
 
@@ -220,4 +219,16 @@ d_short <- function(data){
 	}
 	mt
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
