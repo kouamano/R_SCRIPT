@@ -1,4 +1,4 @@
-
+ï»¿
 ####################################################
 ## RNG const
 ####################################################
@@ -36,7 +36,7 @@ rng_const<-function(data){
 ## all path const
 ####################################################
 
-#‘S•”‚ÌƒyƒA‚ð‚Â‚­‚é
+#å…¨éƒ¨ã®ãƒšã‚¢ã‚’ã¤ãã‚‹
 all_pair <- function(data){
 	n <- nrow(data)
 	y <- n-1
@@ -53,7 +53,7 @@ all_pair <- function(data){
 	pair
 }
 
-#‚ ‚éƒyƒA‚ÆƒOƒ‰ƒt‚ðŽó‚¯Žæ‚Á‚ÄC‘SŒo˜H‚ðo—Í
+#ã‚ã‚‹ãƒšã‚¢ã¨ã‚°ãƒ©ãƒ•ã‚’å—ã‘å–ã£ã¦ï¼Œå…¨çµŒè·¯ã‚’å‡ºåŠ›
 pair_path <- function(pair ,graph){
 	path_can <- list(pair[1])
 	path_rec <- list()
@@ -91,7 +91,7 @@ pair_path <- function(pair ,graph){
 	path_rec
 }
 
-#‘S•”‚ÌƒyƒA‚ð“Ë‚Áž‚ñ‚ÅC‘S•”‚ÌŒo˜H‚ð“¾‚é
+#å…¨éƒ¨ã®ãƒšã‚¢ã‚’çªã£è¾¼ã‚“ã§ï¼Œå…¨éƒ¨ã®çµŒè·¯ã‚’å¾—ã‚‹
 all_pair_path <- function(data){
 	all_p <- all_pair(data)
 	rng <- rng_const(data)
@@ -113,8 +113,8 @@ all_pair_path <- function(data){
 ####################################################
 
 
-#‘S•”‚ÌƒyƒA‚ð“Ë‚Áž‚ñ‚ÅC‘S•”‚ÌŒo˜H‚ð“¾‚é
-#maxmin‚àŒvŽZ‚·‚é
+#å…¨éƒ¨ã®ãƒšã‚¢ã‚’çªã£è¾¼ã‚“ã§ï¼Œå…¨éƒ¨ã®çµŒè·¯ã‚’å¾—ã‚‹
+#maxminã‚‚è¨ˆç®—ã™ã‚‹
 all_pair_path_maxmin <- function(data){
 	all_p <- all_pair(data)
 	rng <- rng_const(data)
@@ -146,7 +146,7 @@ all_pair_path_maxmin <- function(data){
 	list_path
 }
 
-#‚ ‚éƒpƒX‚ÌÅ‘å‚ÌƒGƒbƒW’·
+#ã‚ã‚‹ãƒ‘ã‚¹ã®æœ€å¤§ã®ã‚¨ãƒƒã‚¸é•·
 max_edge <- function(path, rng){
 	max_edge <- 0
 	m <- length(path)

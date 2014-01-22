@@ -1,21 +1,29 @@
-
+﻿
 source("./RNG_const.r")
 
-#�����f�[�^�������f�[�^���󂯂Ƃ��āC���������܂܊e�N���X�^���Ƃɕ���
-#[[1]]�Ŋe�N���X�^�̃f�[�^�t���[���ɃA�N�Z�X
+##################################################
+## connect-DB.index
+##################################################
+
+
+#正解データがついたデータを受けとって，正解ついたまま各クラスタごとに分割
+#[[1]]で各クラスタのデータフレームにアクセス
 split_by_result <- function(data){
 		n <- ncol(data)
         each_cluster <- split(data, data[,n], drop=TRUE)
         each_cluster
 }
 
+#Siを計算
 db_s <- function(data,dshort){
 	sp <- split_by_result(data)
 	k_num <- length(sp)
 	s_i <- c()
 
 	for(k in 1:k_num){
-		medoid <- ####medoid(k)	�ЂƂ̐������A���Ă���####
+		pam_r <- pam(sp[[k]],1)
+		medoids <- medoid(sp[[k]])
+		medoid <- medoids$id.med[1]
 
 		data_num <- nrow(data)
 		data_dim <- ncol(data)
@@ -72,6 +80,7 @@ connect_DB <- function(data){
 	dd <- data[, -dn]
 
 	d_mx <- d_short(dd)
+
 	d_s_i <- db_s(data, d_mx)
 	k <- length(d_s_i)
 
@@ -91,9 +100,7 @@ connect_DB <- function(data){
 ########################################################
 ########################################################
 
-delta <- function(data, dshort){
-	sp <- split_by_result(data)
-	k_num <- length(sp)
+delta <- function(data, dshort,sp,k_num){
 	max_num <- c()
 	
 	data_num <- nrow(data)
@@ -109,7 +116,7 @@ delta <- function(data, dshort){
 				xxx <- data[x][data_dim]
 				yyy <- data[y][data_dim]
 				if((xxx == i)&&(yyy == i)){
-					mm <- dshort[j][k]
+					mm <- dshort[x][y]
 					if(mmm < mm){
 						mmm <- mm
 					}
@@ -122,12 +129,10 @@ delta <- function(data, dshort){
 	max_num
 }
 
-omega <- function(data, dshort){
+omega <- function(data, dshort,sp,k_num){
 	data_num <- nrow(data)
 	data_dim <- ncol(data)
 
-	sp <- split_by_result(data)
-	k_num <- length(sp)
 	mt <- matrix(0,data_num,data_num)
 
 	dnum <- data_num -1
@@ -161,10 +166,10 @@ connect_Dunn <- function(data){
 	dshort <- d_short(dd)
 
 	k1 <- k_num -1
-	bo <- delta(data, dshort)
+	bo <- delta(data, dshort,sp,k_num)
 	b <- max(bo)
 
-	mt <- omega(data, dshort)
+	mt <- omega(data, dshort,sp,k_num)
 
 	min <- 9999999999999
 
@@ -177,7 +182,7 @@ connect_Dunn <- function(data){
 			}
 		}
 	}
-	cD<- min / bo
+	cD<- min / b
 	cD
 }
 
