@@ -28,15 +28,19 @@ mst1_index <-function(data){
 	for(i in 1:knum){
 		md1 <- each_cluster[[i]]
 		nr <- nrow(md1)
-		md2 <- md1[,-nc]
-		md3 <- as.matrix(md2)
-		mst <- mst(md3)
-		cluster_sum <- mst_path_mean(mst)
-		all_sum <- all_sum + cluster_sum
+		if(nr==1){
+		}else{
+			md2 <- md1[,-nc]
+			md3 <- as.matrix(md2)
+			mst <- mst(md3)
+			cluster_sum <- mst_path_mean(mst)
+			all_sum <- all_sum + cluster_sum
+		}
 	}
 	ans <- all_sum / knum
 	ans
 }
+
 
 
 
