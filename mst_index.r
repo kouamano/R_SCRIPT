@@ -1,4 +1,5 @@
 library("nnclust")
+library("cluster")
 
 #正解データがついたデータを受けとって，正解ついたまま各クラスタごとに分割
 #[[1]]で各クラスタのデータフレームにアクセス
@@ -54,6 +55,7 @@ mst2_index <-function(data){
 	an1
 }
 
+#メディアンだけでMSTをつくって，その平均
 between_mst <-function(data){
 	sp <- split_by_result(data)
 	knum <- length(sp)
@@ -66,14 +68,14 @@ between_mst <-function(data){
 		xyz[i,] <- x
 	}
 
-	#以下，重心でMSTをつくり平均をだす
+	#以下，メディアンでMSTをつくり平均をだす
 	mst1 <- mst(xyz)
 	all_mean <- mst_path_mean(mst1)
 	all_mean
 }
 
 #クラスタに別れたデータを受け取る（答え付き）
-#重心に一番近いデータ点をベクトルで返す
+#メディアンをベクトルで返す
 center_xy <- function(data){
 	md <- data
 	nr <- nrow(data)
@@ -92,9 +94,41 @@ mst_all_plus <- function(xyz){
 	s1
 }
 
+#クラスタ間距離をmst1に組み込む 二個目（ペアワイズでBetween）
+#クラスタ間距離：クラスタをペアでくっつけてMST作って，総距離
+#クラスタ内距離（mst1）/クラスタ間距離 小さいほどよい
+mst3_index <- function(data){
+	m1 <- mst1_index(data)
+	b1 <- pair_between_mst(data)
+	an1 <- m1/b1
+	an1
 
+}
 
+#クラスタをペアでくっつけてMSTをつくり，エッジの平均をとる
+#さらに求めた平均を全てたして，ペアの数で割って平均をとった値
+pair_between_mst <- function(data){
+	sp <- split_by_result(data)
+	knum <- length(sp)
+	nc <- ncol(data)
 
+	k <- knum - 1
+	all_path <- 0
+	n <- 0
+
+	for (i in 1:k){
+		l <- i + 1
+		for (j in l:knum){
+			sdata <- rbind(sp[[i]], sp[[j]])
+			sdata_no_ans <- sdata[,-nc]
+			p1 <- mst(as.matrix(sdata_no_ans))
+			all_path <- mst_path_mean(p1) + all_path
+			n <- n + 1
+		}
+	}
+	a1 <- all_path / n
+	a1
+}
 
 
 
