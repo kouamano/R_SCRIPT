@@ -16,8 +16,9 @@ mst_path_mean <- function(mst){
 	mm
 }
 
-#正解つきデータを受け取り，尺度を返す
-#mst1
+#正解つきデータを受け取り，尺度を返す．
+#クラスタ内のパスの平均長を出して，クラスタごとの平均長の平均をだす
+#mst1:データ数＝クラスタ数のときもっともよい
 mst1_index <-function(data){
 	each_cluster <- split_by_result(data)
 	knum <- length(each_cluster)
@@ -40,6 +41,63 @@ mst1_index <-function(data){
 	ans <- all_sum / knum
 	ans
 }
+
+#クラスタ間距離をmst1に組み込む
+#クラスタ間距離：各クラスタの重心近くの点でMSTを作成，平均を計算
+#クラスタ内距離（mst1）/クラスタ間距離 小さいほどよい
+
+mst2_index <-function(data){
+	m1 <- mst1_index(data)
+	b1 <- between_mst(data)
+
+	an1 <- m1/b1
+	an1
+}
+
+between_mst <-function(data){
+	sp <- split_by_result(data)
+	knum <- length(sp)
+	nc <- ncol(data)
+
+	xyz <- matrix(nrow=knum, ncol=(nc-1))
+
+	for(i in 1:knum){
+		x <- center_xy(sp[[i]])
+		xyz[i,] <- x
+	}
+
+	#以下，重心でMSTをつくり平均をだす
+	mst1 <- mst(xyz)
+	all_mean <- mst_path_mean(mst1)
+	all_mean
+}
+
+#クラスタに別れたデータを受け取る（答え付き）
+#重心に一番近いデータ点をベクトルで返す
+center_xy <- function(data){
+	md <- data
+	nr <- nrow(data)
+	nc <- ncol(data)
+
+	md_no_ans <- md[,-nc]
+	pm	<- pam(md_no_ans, 1)
+	a1 <- as.vector(pm$medoids)
+	a1
+}
+
+#行列を受け取ってMSTパスの総距離を返す
+mst_all_plus <- function(xyz){
+	mst_xyz <- mst(xyz)
+	s1 <- sum(mst_xyz$dist)
+	s1
+}
+
+
+
+
+
+
+
 
 
 
